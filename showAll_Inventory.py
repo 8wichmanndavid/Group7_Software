@@ -1,6 +1,6 @@
 import mysql.connector
 
-def showAll_Inventory():
+def showAll_Inventory(mycursor):
     sqlvar = "SELECT PRODUCTS.PROD_NAME, PRODUCTS.BRAND, DEPARTMENT.DEPT_NAME, SUM(INVENTORY.QUANTITY), PRODUCTS.UNIT_PRC, INVENTORY.SKU \
                      FROM DEPARTMENT \
                      JOIN PRODUCTS \
