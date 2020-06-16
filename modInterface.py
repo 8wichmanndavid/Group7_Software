@@ -3,9 +3,9 @@ from modConnection import *
 import showAll_Inventory as showAll
 
 class Window(Frame):
-    defaultHeaderSpacing = "{:12s}{:15s}{:25s}{:9s}{:7s}{:10s}\n"
-    defaultHeader = defaultHeaderSpacing.format("Quantity", "Brand", "Product", "SKU", "Cost", "Department") + \
-                    "="*80 + "\n"
+    defaultHeaderSpacing = "{:12s}{:25s}{:40s}{:9s}{:7s}{:10s}\n"
+    defaultHeader = defaultHeaderSpacing.format("Quantity", "Brand", "Product", "SKU", "Price", "Department") + \
+                    "="*100 + "\n"
 
     expirationHeaderSpacing = "{:25s}{:15s}{:12s}{:12s}{:7s}{:12s}{:9s}\n"
     expirationHeader = expirationHeaderSpacing.format("Product", "Brand", "Department", "Quantity", "Cost", "Expiration", "SKU") +\
@@ -49,8 +49,7 @@ class Window(Frame):
         exit()
 
     def display(self):
-        # Quantity, brand, product, sku, price, dept
-
+        
         # Initialize display box for editing
         self.txtDisplay["state"] = "normal"
         self.txtDisplay.delete("1.0", "end-1c")
