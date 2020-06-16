@@ -25,3 +25,4 @@ def expiration(mycursor):
                      
     mycursor.execute(sqlvar)
     result = mycursor.fetchall()
+    return result
