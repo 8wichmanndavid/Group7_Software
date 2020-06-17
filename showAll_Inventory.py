@@ -2,11 +2,11 @@ import mysql.connector
 
 def showAll_Inventory(mycursor):
     sqlvar = "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
-                     FROM GroceryApp_DEPARTMENT as dept\
-                     JOIN GroceryApp_PRODUCTS as prod\
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod\
                      ON \
                      prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN GroceryApp_INVENTORY as inv\
+                     JOIN INVENTORY as inv\
                      ON \
                      inv.SKU = prod.SKU \
                      GROUP BY \
