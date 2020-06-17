@@ -12,11 +12,11 @@ def main():
     on the same machine as the program.
     '''
 
-    # host="puff.mnstate.edu"
-    # port=3306
-    # database=
-    # user=
-    # password=
+    host="puff.mnstate.edu"
+    port=3306
+    database='nathan-heidt_books'
+    user='nathan-heidt'
+    password='Oblivion4$'
 
     connection = conn.Connection(host, user, password, database, port)
 

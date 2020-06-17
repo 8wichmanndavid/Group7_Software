@@ -1,6 +1,7 @@
 from tkinter import *
 from modConnection import *
 import showAll_Inventory as showAll
+import Expiration as exp
 
 class Window(Frame):
 
@@ -10,9 +11,10 @@ class Window(Frame):
     defaultHeader = defaultHeaderSpacing.format("Quantity", "Brand", "Product", "SKU", "Price", "Department") + \
                     "="*100 + "\n"
 
-    expirationHeaderSpacing = "{:25s}{:15s}{:12s}{:12s}{:7s}{:12s}{:9s}\n"
-    expirationHeader = expirationHeaderSpacing.format("Product", "Brand", "Department", "Quantity", "Cost", "Expiration", "SKU") +\
-                    "="*90 + "\n"
+    expirationHeaderSpacing = "{:40s}{:25s}{:12s}{:12s}{:7s}{:12s}{:9s}\n"
+    expirationValueSpacing = "{:40s}{:25s}{:12s}{:<12f}{:<7.2f}{:12s}{:<9f}\n"
+    expirationHeader = expirationHeaderSpacing.format("Product", "Brand", "Department", "Quantity", "Price", "Expiration", "SKU") +\
+                    "="*115 + "\n"
     
     def __init__(self, connection, master = None):
         Frame.__init__(self, master)
@@ -41,6 +43,10 @@ class Window(Frame):
         self.btnReset["width"] = 7
         self.btnReset.place(x=410, y=50)
 
+        self.btnExpir = Button(self, text="Expire", command=self.getExpirationDates)
+        self.btnExpir["width"] = 7
+        self.btnExpir.place(x=470, y=50)
+
         self.txtDisplay = Text(self, height=35, width=105)
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
@@ -50,6 +56,22 @@ class Window(Frame):
     def client_exit(self):
         self.connection.Disconnect()
         exit()
+
+    def getExpirationDates(self):
+        self.master.geometry("1000x700")
+        self.txtDisplay["width"] = 118
+        # Initialize display box for editing
+        self.txtDisplay["state"] = "normal"
+        self.txtDisplay.delete("1.0", "end-1c")
+
+        data = exp.expiration(self.connection.cursor)
+        output = self.formatExp(data)
+
+        # Display result
+        self.txtDisplay.insert(END, output)
+
+        # Disable display box to prevent editing
+        self.txtDisplay["state"] = "disabled"
 
     def display(self):
 
@@ -65,9 +87,9 @@ class Window(Frame):
             filterBy = "prod.SKU = " + searchBy 
             data = self.connection.ExecuteQueryLiteral(
                     "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
-                     FROM DEPARTMENT as dept\
-                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
+                     FROM GroceryApp_DEPARTMENT as dept\
+                     JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
                      WHERE " + filterBy + 
                      " GROUP BY \
                      dept.DEPT_NAME, \
@@ -84,9 +106,9 @@ class Window(Frame):
             filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'" 
             data = self.connection.ExecuteQueryLiteral(
                     "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
-                     FROM DEPARTMENT as dept\
-                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
+                     FROM GroceryApp_DEPARTMENT as dept\
+                     JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
                      WHERE " + filterBy + 
                      " GROUP BY \
                      dept.DEPT_NAME, \
@@ -109,12 +131,25 @@ class Window(Frame):
         self.txtSearch.delete("1.0", "end-1c")
         self.display()
 
+        self.master.geometry("900x700")
+        self.txtDisplay["width"] = 105
+
     def format(self, resultList):
         output = Window.defaultHeader
         
         for result in resultList:
             output += Window.defaultValueSpacing.format(
                 result[0], result[1], result[2], result[3], result[4], result[5]
+            )
+
+        return output
+
+    def formatExp(self, resultList):
+        output = Window.expirationHeader
+        
+        for result in resultList:
+            output += "{:40s}{:25s}{:12s}{:<12f}{:<7.2f}{:12s}{:<9f}\n".format(
+                result[0], result[1], result[2], result[3], result[4], str(result[5]), result[6]
             )
 
         return output

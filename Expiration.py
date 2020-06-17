@@ -9,10 +9,10 @@ def expiration(mycursor):
                 UNIT_PRC,\
                 EXPIR_DATE,\
                 PROD.SKU\
-                FROM PRODUCTS AS PROD\
-                JOIN INVENTORY AS INV\
+                FROM GroceryApp_PRODUCTS AS PROD\
+                JOIN GroceryApp_INVENTORY AS INV\
                 ON PROD.SKU = INV.SKU\
-                JOIN DEPARTMENT AS DEPT\
+                JOIN GroceryApp_DEPARTMENT AS DEPT\
                 ON DEPT.DEPT_NUM = PROD.DEPT_NUM\
                 ORDER BY\
                 EXPIR_DATE,\
