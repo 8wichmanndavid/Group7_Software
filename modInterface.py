@@ -31,10 +31,6 @@ class Window(Frame):
         self.btnReset["width"] = 7
         self.btnReset.place(x=400, y=50)
 
-        self.btnExpire = Button(self, text="Get Expiration Dates", command=self.getExpirationDates)
-        self.btnExpire["width"] = 15
-        self.btnExpire.place(x=850, y=50)
-
         self.txtDisplay = Text(self, height=35, width=118)
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
@@ -57,12 +53,6 @@ class Window(Frame):
 
         # Disable display box to prevent editing
         self.txtDisplay["state"] = "disabled"
-
-    def getExpirationDates(self):
-        data = Queries.DbQueries.Expiration(self.connection.cursor)
-        output = self.formatExpirationResult(data)
-
-        self.display(output)
 
     def reset(self):
 
@@ -103,20 +93,6 @@ class Window(Frame):
         for result in resultList:
             output += "{:<12f}{:25s}{:40s}{:<9f}{:<7.2f}{:10s}\n".format(
                 result[0], result[1], result[2], result[3], result[4], result[5]
-            )
-
-        return output
-
-    def formatExpirationResult(self, resultList):
-
-        # "Expiration Dates" header
-        output = "{:40s}{:25s}{:12s}{:12s}{:7s}{:12s}{:9s}\n".format(
-                    "Product", "Brand", "Department", "Quantity", "Price", "Expiration", "SKU") +\
-                    "="*115 + "\n"
-        
-        for result in resultList:
-            output += "{:40s}{:25s}{:12s}{:<12f}{:<7.2f}{:12s}{:<9f}\n".format(
-                result[0], result[1], result[2], result[3], result[4], str(result[5]), result[6]
             )
 
         return output

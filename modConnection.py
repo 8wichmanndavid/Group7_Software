@@ -29,19 +29,3 @@ class Connection:
         self.cursor.close()
         self.connection.close()
         print("Connection terminated")
-
-    def ExecuteQueryLiteral(self, sql):
-        self.cursor.execute(sql)
-        result = self.cursor.fetchall()
-
-        return result
-
-    def ExecuteQuery(self, table, column = "*", where = ""):
-        query = "SELECT " + column + " FROM " + table
-        if (where != ""):
-            query += " WHERE " + where
-
-        self.cursor.execute(query)
-        result = self.cursor.fetchall()
-   
-        return result
