@@ -35,6 +35,10 @@ class Window(Frame):
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
 
+        self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
+        self.btnExpiration["width"] = "16"
+        self.btnExpiration.place(x = 495, y = 50)
+
         # Initialize display with all products
         self.reset()
 
@@ -93,6 +97,28 @@ class Window(Frame):
         for result in resultList:
             output += "{:<12f}{:25s}{:40s}{:<9f}{:<7.2f}{:10s}\n".format(
                 result[0], result[1], result[2], result[3], result[4], result[5]
+            )
+
+        return output
+
+    def showExpiration(self):
+        self.txtDisplay["state"] = "normal"
+        self.txtDisplay.delete("1.0", "end-1c")
+
+        data = Queries.DbQueries.Expiration(self.connection.cursor)
+        output = self.formatExpirationResult(data)
+        
+        self.txtDisplay.insert(END, output)
+        self.txtDisplay["state"] = "disabled"
+
+    def formatExpirationResult(self, resultList):
+        output = "{:40s}{:25s}{:12s}{:12s}{:7s}{:12s}{:7s}\n".format(
+                    "Product", "Brand", "Department", "Quantity", "Cost", "Expiration", "SKU") +\
+                    "="*115 + "\n"
+        
+        for result in resultList:
+            output += "{:40s}{:25s}{:12s}{:<12f}{:<7.2f}{:12s}{:<9f}\n".format(
+                result[0], result[1], result[2], result[3], result[4], str(result[5]), result[6]
             )
 
         return output
