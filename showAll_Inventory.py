@@ -1,20 +1,20 @@
 import mysql.connector
 
 def showAll_Inventory(mycursor):
-    sqlvar = "SELECT PRODUCTS.PROD_NAME, PRODUCTS.BRAND, DEPARTMENT.DEPT_NAME, SUM(INVENTORY.QUANTITY), PRODUCTS.UNIT_PRC, INVENTORY.SKU \
-                     FROM DEPARTMENT \
-                     JOIN PRODUCTS \
+    sqlvar = "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod\
                      ON \
-                     PRODUCTS.DEPT_NUM = DEPARTMENT.DEPT_NUM \
-                     JOIN INVENTORY \
+                     prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv\
                      ON \
-                     INVENTORY.SKU = PRODUCTS.SKU \
+                     inv.SKU = prod.SKU \
                      GROUP BY \
-                     DEPARTMENT.DEPT_NAME, \
-                     PRODUCTS.PROD_NAME, \
-                     PRODUCTS.BRAND, \
-                     PRODUCTS.UNIT_PRC, \
-                     INVENTORY.SKU"
+                     dept.DEPT_NAME, \
+                     prod.PROD_NAME, \
+                     prod.BRAND, \
+                     prod.UNIT_PRC, \
+                     inv.SKU"
                      
     mycursor.execute(sqlvar)
     result = mycursor.fetchall()

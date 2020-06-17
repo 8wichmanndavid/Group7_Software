@@ -1,14 +1,23 @@
 from tkinter import *
 from modConnection import *
+import showAll_Inventory as showAll
 
 class Window(Frame):
-    displayHeader = "{:s}{:s}{:s}\n".format("ID", "Product", "Department") + \
-                    "============================\n"
+
+    # Format spacing for 'View' header and query results
+    defaultHeaderSpacing = "{:12s}{:25s}{:40s}{:9s}{:7s}{:10s}\n"
+    defaultValueSpacing = "{:<12f}{:25s}{:40s}{:<9f}{:<7.2f}{:10s}\n"
+    defaultHeader = defaultHeaderSpacing.format("Quantity", "Brand", "Product", "SKU", "Price", "Department") + \
+                    "="*100 + "\n"
+
+    expirationHeaderSpacing = "{:25s}{:15s}{:12s}{:12s}{:7s}{:12s}{:9s}\n"
+    expirationHeader = expirationHeaderSpacing.format("Product", "Brand", "Department", "Quantity", "Cost", "Expiration", "SKU") +\
+                    "="*90 + "\n"
     
     def __init__(self, connection, master = None):
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("500x500")
+        self.master.geometry("900x700")
 
         self.connection = connection
         self.initWindow()
@@ -32,7 +41,7 @@ class Window(Frame):
         self.btnReset["width"] = 7
         self.btnReset.place(x=410, y=50)
 
-        self.txtDisplay = Text(self, height=24, width=55)
+        self.txtDisplay = Text(self, height=35, width=105)
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
 
@@ -52,17 +61,41 @@ class Window(Frame):
         searchBy = self.txtSearch.get("1.0", "end-1c")
 
         # Query database
-        if searchBy.isalpha(): 
-            filterBy = "lastName = " + "'" + searchBy + "'"
-            data = self.connection.ExecuteQuery("Authors", where=filterBy)
-
-        elif searchBy.isnumeric():
-            filterBy = "authorId = " + "'" + searchBy + "'"
-            data = self.connection.ExecuteQuery("Authors", where=filterBy)
+        if searchBy.isnumeric():
+            filterBy = "prod.SKU = " + searchBy 
+            data = self.connection.ExecuteQueryLiteral(
+                    "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
+                     WHERE " + filterBy + 
+                     " GROUP BY \
+                     dept.DEPT_NAME, \
+                     prod.PROD_NAME, \
+                     prod.BRAND, \
+                     prod.UNIT_PRC, \
+                     inv.SKU"
+            )
         
-        else:
-            data = self.connection.ExecuteQuery("Authors")
-
+        elif searchBy == "":
+            data = showAll.showAll_Inventory(self.connection.cursor)
+        
+        else: 
+            filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'" 
+            data = self.connection.ExecuteQueryLiteral(
+                    "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
+                     WHERE " + filterBy + 
+                     " GROUP BY \
+                     dept.DEPT_NAME, \
+                     prod.PROD_NAME, \
+                     prod.BRAND, \
+                     prod.UNIT_PRC, \
+                     inv.SKU"
+            )
+    
         # Format result
         output = self.format(data)
 
@@ -77,10 +110,11 @@ class Window(Frame):
         self.display()
 
     def format(self, resultList):
-        output = Window.displayHeader
+        output = Window.defaultHeader
         
-        # TODO: Clean results of punctuation and format spacing to align with header
         for result in resultList:
-            output += str(result) + "\n"
+            output += Window.defaultValueSpacing.format(
+                result[0], result[1], result[2], result[3], result[4], result[5]
+            )
 
         return output
