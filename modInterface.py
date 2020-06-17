@@ -3,7 +3,10 @@ from modConnection import *
 import showAll_Inventory as showAll
 
 class Window(Frame):
+
+    # Format spacing for 'View' header and query results
     defaultHeaderSpacing = "{:12s}{:25s}{:40s}{:9s}{:7s}{:10s}\n"
+    defaultValueSpacing = "{:<12f}{:25s}{:40s}{:<9f}{:<7.2f}{:10s}\n"
     defaultHeader = defaultHeaderSpacing.format("Quantity", "Brand", "Product", "SKU", "Price", "Department") + \
                     "="*100 + "\n"
 
@@ -49,7 +52,7 @@ class Window(Frame):
         exit()
 
     def display(self):
-        
+
         # Initialize display box for editing
         self.txtDisplay["state"] = "normal"
         self.txtDisplay.delete("1.0", "end-1c")
@@ -61,10 +64,10 @@ class Window(Frame):
         if searchBy.isnumeric():
             filterBy = "prod.SKU = " + searchBy 
             data = self.connection.ExecuteQueryLiteral(
-                    "SELECT FORMAT(SUM(inv.QUANTITY), 0), prod.BRAND, prod.PROD_NAME, FORMAT(inv.SKU, 0), FORMAT(prod.UNIT_PRC, 2), dept.DEPT_NAME \
-                     FROM GroceryApp_DEPARTMENT as dept\
-                     JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
+                    "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
                      WHERE " + filterBy + 
                      " GROUP BY \
                      dept.DEPT_NAME, \
@@ -78,12 +81,12 @@ class Window(Frame):
             data = showAll.showAll_Inventory(self.connection.cursor)
         
         else: 
-            filterBy = "prod.PROD_NAME = '" + searchBy + "'" 
+            filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'" 
             data = self.connection.ExecuteQueryLiteral(
-                    "SELECT FORMAT(SUM(inv.QUANTITY), 0), prod.BRAND, prod.PROD_NAME, FORMAT(inv.SKU, 0), FORMAT(prod.UNIT_PRC, 2), dept.DEPT_NAME \
-                     FROM GroceryApp_DEPARTMENT as dept\
-                     JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
+                    "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
                      WHERE " + filterBy + 
                      " GROUP BY \
                      dept.DEPT_NAME, \
@@ -110,7 +113,7 @@ class Window(Frame):
         output = Window.defaultHeader
         
         for result in resultList:
-            output += Window.defaultHeaderSpacing.format(
+            output += Window.defaultValueSpacing.format(
                 result[0], result[1], result[2], result[3], result[4], result[5]
             )
 
