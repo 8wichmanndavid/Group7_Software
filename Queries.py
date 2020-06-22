@@ -16,7 +16,7 @@ class DbQueries:
                      
         mycursor.execute(sqlvar)
         result = mycursor.fetchall()
-
+        
         return result
 
     @classmethod
@@ -36,6 +36,7 @@ class DbQueries:
                      
         mycursor.execute(sqlvar)
         result = mycursor.fetchall()
+        
         return result
 
     @classmethod
@@ -54,5 +55,5 @@ class DbQueries:
 
         mycursor.execute(sqlvar)
         result = mycursor.fetchall()
-
+        
         return result

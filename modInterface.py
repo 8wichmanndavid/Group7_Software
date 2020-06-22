@@ -98,7 +98,7 @@ class Window(Frame):
             output += "{:<12f}{:25s}{:40s}{:<9f}{:<7.2f}{:10s}\n".format(
                 result[0], result[1], result[2], result[3], result[4], result[5]
             )
-
+        
         return output
 
     def showExpiration(self):
@@ -109,7 +109,6 @@ class Window(Frame):
         output = self.formatExpirationResult(data)
         
         self.txtDisplay.insert(END, output)
-        self.txtDisplay["state"] = "disabled"
 
     def formatExpirationResult(self, resultList):
         output = "{:40s}{:25s}{:12s}{:12s}{:7s}{:12s}{:7s}\n".format(
