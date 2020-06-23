@@ -12,13 +12,13 @@ def main():
     on the same machine as the program.
     '''
 
-    # host="puff.mnstate.edu"
+    host="localhost"
     # port=3306
-    # database=
-    # user=
-    # password=
+    database="testgrocery"
+    user="root"
+    password="418733#zepWer"
 
-    connection = conn.Connection(host, user, password, database, port)
+    connection = conn.Connection(host, user, password, database)
 
     root = Tk()
     app = interface.Window(connection, root)
