@@ -102,13 +102,10 @@ class Window(Frame):
         return output
 
     def showExpiration(self):
-        self.txtDisplay["state"] = "normal"
-        self.txtDisplay.delete("1.0", "end-1c")
-
         data = Queries.DbQueries.Expiration(self.connection.cursor)
         output = self.formatExpirationResult(data)
-        
-        self.txtDisplay.insert(END, output)
+
+        self.display(output)
 
     def formatExpirationResult(self, resultList):
         output = "{:40s}{:25s}{:12s}{:12s}{:7s}{:12s}{:7s}\n".format(
