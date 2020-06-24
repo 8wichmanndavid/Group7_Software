@@ -42,10 +42,6 @@ class Window(Frame):
         # Initialize display with all products
         self.reset()
 
-    def client_exit(self):
-        self.connection.Disconnect()
-        exit()
-
     def display(self, textOutput):
 
         # Initialize display box for editing

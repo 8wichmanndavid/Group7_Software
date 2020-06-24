@@ -7,7 +7,7 @@ class LoginWindow(Frame):
     def __init__(self, connection, master = None):
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("400x400")
+        self.master.geometry("200x200")
 
         self.connection = connection 
         self.initWindow()
@@ -18,20 +18,27 @@ class LoginWindow(Frame):
         self.connection.Connect()
 
         self.txtUserName = Entry(self.master)
-        self.txtUserName.place(x=30, y=50)
+        self.txtUserName.place(x=40, y=80)
 
         self.txtPassword = Entry(self.master, show='*')
-        self.txtPassword.place(x=30,y=90)
+        self.txtPassword.place(x=40,y=120)
 
         self.btnLogin = Button(self, text="Login", command=lambda: self.login(interface.Window))
         self.btnLogin["width"] = 7
-        self.btnLogin.place(x=30, y=130)
+        self.btnLogin.place(x=40, y=160)
+
+        self.btnClose = Button(self, text="Close", command=self.client_exit)
+        self.btnClose.place(x=145, y=5)
+    
+    def client_exit(self):
+        self.connection.Disconnect()
+        exit()
 
     def login(self, _class):
         var = StringVar()
         var.set("")
         #if self.validateUser():
-        if True:
+        if False:
             self.txtPassword.delete("0", "end")
             root = Tk()
             app = interface.Window(self.connection, root, _class)
@@ -41,7 +48,7 @@ class LoginWindow(Frame):
             # Display message to user
             self.label = Label(self, textvariable=var)
             var.set("Username or Password is invalid")
-            self.label.place(x=50, y=5)
+            self.label.place(x=15, y=50)
 
     def validateUser(self):
 
