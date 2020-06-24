@@ -37,7 +37,7 @@ class Window(Frame):
 
         self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
         self.btnExpiration["width"] = "16"
-        self.btnExpiration.place(x = 495, y = 50)
+        self.btnExpiration.place(x = 475, y = 50)
 
         # Initialize display with all products
         self.reset()
