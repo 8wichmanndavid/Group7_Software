@@ -4,7 +4,7 @@ import Queries
 
 class Window(Frame):
     
-    def __init__(self, connection, master = None):
+    def __init__(self, connection, master, loginWindow):
         Frame.__init__(self, master)
         self.master = master
         self.master.geometry("1000x700")
@@ -17,7 +17,7 @@ class Window(Frame):
         self.pack(fill=BOTH, expand=1)
         self.connection.Connect()
         
-        self.btnQuit = Button(self, text="Exit", command=self.client_exit)
+        self.btnQuit = Button(self, text="Logout", command=self.logout)
         self.btnQuit.place(x=5, y=5)
 
         self.txtSearch = Text(self, height=1, width=30)
@@ -118,3 +118,6 @@ class Window(Frame):
             )
 
         return output
+
+    def logout(self):
+        self.master.destroy()

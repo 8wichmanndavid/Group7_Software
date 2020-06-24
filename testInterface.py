@@ -1,4 +1,5 @@
-import modInterface as interface
+#import modInterface as interface
+import modLoginWindow as login
 import modConnection as conn
 from tkinter import *
 
@@ -12,16 +13,16 @@ def main():
     on the same machine as the program.
     '''
 
-    host="localhost"
-    # port=3306
-    database="testgrocery"
-    user="root"
-    password="418733#zepWer"
+    host="puff.mnstate.edu"
+    port=3306
+    database="nathan-heidt_books"
+    user="nathan-heidt"
+    password="Oblivion4$"
 
     connection = conn.Connection(host, user, password, database)
 
     root = Tk()
-    app = interface.Window(connection, root)
+    app = login.LoginWindow(connection, root)
     root.mainloop()
 
 main()
