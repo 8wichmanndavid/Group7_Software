@@ -1,6 +1,7 @@
 from tkinter import *
 from modConnection import *
 import Queries
+# from addProduct import *
 
 class Window(Frame):
     
@@ -38,6 +39,13 @@ class Window(Frame):
         self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
         self.btnExpiration["width"] = "16"
         self.btnExpiration.place(x = 495, y = 50)
+
+        self.btnAddRemoveUpdate = Button(self, text = "Add Product", command=self.openAddProductWindow)
+        self.btnAddRemoveUpdate["width"] = "16"
+        self.btnAddRemoveUpdate.place(x = 615, y = 50)
+
+        def openAddProductWindow(self):
+            self.master = Add_Product(self.connection)
 
         # Initialize display with all products
         self.reset()
