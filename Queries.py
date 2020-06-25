@@ -57,3 +57,27 @@ class DbQueries:
         result = mycursor.fetchall()
         
         return result
+
+    @classmethod
+    def addProductQuery(self, mycursor, productList):
+        #print(productList)
+        #self._db = mysql.connector.connect(host="localhost", user="root", password="418733#zepWer", database="testgrocery")
+        
+        sql_department_insert = "INSERT IGNORE INTO DEPARTMENT(DEPARTMENT.DEPT_NUM, DEPARTMENT.DEPT_NAME)VALUES(%s, %s)"
+        sql_department_val = (productList[0], productList[1])
+
+        sql_delivery_insert = "INSERT IGNORE INTO DELIVERY(DELIVERY.DEL_NUM, DELIVERY.DATE_REC)VALUES(%s, %s)"
+        sql_delivery_val = (productList[2], productList[3])  
+        
+        sql_products_insert = "INSERT IGNORE INTO PRODUCTS(PRODUCTS.SKU, PRODUCTS.PROD_NAME, PRODUCTS.BRAND, PRODUCTS.DEPT_NUM, PRODUCTS.UNIT_PRC)VALUES(%s, %s, %s, %s, %s)"
+        sql_products_val = (productList[4], productList[5], productList[6], productList[0], productList[7])
+        
+        sql_inventory_insert = "INSERT IGNORE INTO INVENTORY(INVENTORY.SKU, INVENTORY.DEL_NUM, INVENTORY.EXPIR_DATE, INVENTORY.QUANTITY)VALUES(%s, %s, %s, %s)"
+        sql_inventory_val = (productList[4], productList[2], productList[8], productList[9])
+        
+        mycursor.execute(sql_department_insert, sql_department_val)
+        mycursor.execute(sql_delivery_insert, sql_delivery_val)
+        mycursor.execute(sql_products_insert, sql_products_val)
+        mycursor.execute(sql_inventory_insert, sql_inventory_val)
+
+        #self._db.commit()
