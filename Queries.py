@@ -1,4 +1,6 @@
 import mysql.connector
+from modInterface import *
+from modConnection import *
 
 class DbQueries:
     @classmethod
@@ -59,10 +61,7 @@ class DbQueries:
         return result
 
     @classmethod
-    def addProductQuery(self, mycursor, productList):
-        #print(productList)
-        #self._db = mysql.connector.connect(host="localhost", user="root", password="418733#zepWer", database="testgrocery")
-        
+    def addProductQuery(self, mycursor, productList, connection):
         sql_department_insert = "INSERT IGNORE INTO DEPARTMENT(DEPARTMENT.DEPT_NUM, DEPARTMENT.DEPT_NAME)VALUES(%s, %s)"
         sql_department_val = (productList[0], productList[1])
 
@@ -80,4 +79,4 @@ class DbQueries:
         mycursor.execute(sql_products_insert, sql_products_val)
         mycursor.execute(sql_inventory_insert, sql_inventory_val)
 
-        #self._db.commit()
+        connection.saveData()

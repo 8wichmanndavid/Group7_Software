@@ -2,6 +2,7 @@ from tkinter import *
 from modConnection import *
 from modInterface import *
 import Queries
+import mysql.connector
 
 class Add_Product(Toplevel):
     def __init__(self, connection, master = None):
@@ -10,6 +11,7 @@ class Add_Product(Toplevel):
         self.geometry("600x600")
         self.textFields = "Department Num", "Department Name", "Delivery Number", "Date Received", "SKU", \
                           "Product Name", "Brand", "Unit Price", "Expiration Date", "Quantity"
+        #self.textFields = "Department Num", "SKU", "Product Name", "Brand", "Unit Price"
         #self.textFields = "Department Num", "Department Name"
         self.theEntries = []
         self.connection = connection
@@ -38,7 +40,13 @@ class Add_Product(Toplevel):
 
     def submitForm(self):
         tempProductList = self.fetchEntries()
-        Queries.DbQueries.addProductQuery(self.connection.cursor, tempProductList)
+        Queries.DbQueries.addProductQuery(self.connection.cursor, tempProductList, self.connection)
+        #sql_products_insert = "INSERT IGNORE INTO PRODUCTS(PRODUCTS.SKU, PRODUCTS.PROD_NAME, PRODUCTS.BRAND, PRODUCTS.DEPT_NUM, PRODUCTS.UNIT_PRC)VALUES(%s, %s, %s, %s, %s)"
+        #sql_products_val = (tempProductList[4], tempProductList[5], tempProductList[6], tempProductList[0], tempProductList[7])
+        #mycursor = self.connection.cursor()
+        #mycursor.execute(sql_products_insert, sql_products_val)
+        #print(self.connection)
+        #self.connection.commit()
         #self._db.commit()
         self.destroy()
 
