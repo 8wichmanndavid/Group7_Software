@@ -60,18 +60,3 @@ class LoginWindow(Frame):
             self.label = Label(self, textvariable=var)
             var.set("Username or Password is invalid")
             self.label.place(x=15, y=50)
-
-    def validateUser(self):
-
-        # Get credentials from screen
-        user = self.txtUserName.get("1.0", "end-1c")
-        password = self.txtPassword.get()
-        isValidUser = False
-
-        # Check database for user
-        #queryResult = Queries.DbQueries
-
-        # if len(queryResult) == 1:
-        #     isValidUser = True
-
-        return isValidUser

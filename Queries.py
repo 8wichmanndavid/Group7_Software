@@ -4,9 +4,9 @@ class DbQueries:
     @classmethod
     def ShowAll_Inventory(self, mycursor):
         sqlvar = "SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
-                 FROM GroceryApp_DEPARTMENT as dept\
-                 JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                 JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
+                 FROM DEPARTMENT as dept\
+                 JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                 JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
                  GROUP BY \
                  dept.DEPT_NAME, \
                  prod.PROD_NAME, \
@@ -22,9 +22,9 @@ class DbQueries:
     @classmethod
     def Expiration(self, mycursor):
         sqlvar = "SELECT PROD.PROD_NAME, PROD.BRAND, DEPT.DEPT_NAME, INV.QUANTITY, PROD.UNIT_PRC, INV.EXPIR_DATE, PROD.SKU\
-                FROM GroceryApp_PRODUCTS AS PROD\
-                JOIN GroceryApp_INVENTORY AS INV ON PROD.SKU = INV.SKU\
-                JOIN GroceryApp_DEPARTMENT AS DEPT ON DEPT.DEPT_NUM = PROD.DEPT_NUM\
+                FROM PRODUCTS AS PROD\
+                JOIN INVENTORY AS INV ON PROD.SKU = INV.SKU\
+                JOIN DEPARTMENT AS DEPT ON DEPT.DEPT_NUM = PROD.DEPT_NUM\
                 ORDER BY\
                 EXPIR_DATE,\
                 DEPT_NAME, \
@@ -43,9 +43,9 @@ class DbQueries:
     def SearchQuery(self, mycursor, searchBy):
         print("Searching database for items...")
         sqlvar = ("SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
-                     FROM GroceryApp_DEPARTMENT as dept\
-                     JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
-                     JOIN GroceryApp_INVENTORY as inv ON inv.SKU = prod.SKU \
+                     FROM DEPARTMENT as dept\
+                     JOIN PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
+                     JOIN INVENTORY as inv ON inv.SKU = prod.SKU \
                      WHERE " + searchBy + 
                      " GROUP BY \
                      dept.DEPT_NAME, \
@@ -63,7 +63,7 @@ class DbQueries:
     def CheckCredentials(self, mycursor, empNum, password):
         print("Validating credentials...")
         tmp = str(empNum)
-        sqlvar = "SELECT CREDENTIALS FROM GroceryApp_EMPLOYEES\
+        sqlvar = "SELECT CREDENTIALS FROM EMPLOYEES\
                   WHERE EMP_NUM = '" + tmp + "';"
 
         mycursor.execute(sqlvar)
