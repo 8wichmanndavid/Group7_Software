@@ -5,9 +5,12 @@ import Queries
 class Window(Frame):
     
     def __init__(self, connection, master, loginWindow):
+        center_x = master.winfo_screenwidth()/2 - 500
+        center_y = master.winfo_screenheight()/2 - 350
+
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("1000x700")
+        self.master.geometry("1000x700+%d+%d" % (center_x, center_y))
 
         self.connection = connection
         self.initWindow()
@@ -70,14 +73,14 @@ class Window(Frame):
 
         # Determine table column to search by
         if searchBy.isnumeric():
-            filterBy = "prod.SKU = " + searchBy
+            filterBy = "prod.SKU LIKE '%" + searchBy + "%'"
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         elif searchBy == "":
             data = Queries.DbQueries.ShowAll_Inventory(self.connection.cursor)
 
         else:
-            filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'"
+            filterBy = "prod.PROD_NAME LIKE '%" + searchBy.lower() + "%'"
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         output = self.formatResult(data)

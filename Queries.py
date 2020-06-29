@@ -41,6 +41,7 @@ class DbQueries:
 
     @classmethod
     def SearchQuery(self, mycursor, searchBy):
+        print("Searching database for items...")
         sqlvar = ("SELECT SUM(inv.QUANTITY), prod.BRAND, prod.PROD_NAME, inv.SKU, prod.UNIT_PRC, dept.DEPT_NAME \
                      FROM GroceryApp_DEPARTMENT as dept\
                      JOIN GroceryApp_PRODUCTS as prod ON prod.DEPT_NUM = dept.DEPT_NUM \
@@ -60,14 +61,19 @@ class DbQueries:
 
     @classmethod
     def CheckCredentials(self, mycursor, empNum, password):
+        print("Validating credentials...")
         tmp = str(empNum)
-        sqlvar = "SELECT CREDENTIALS FROM EMPLOYEES\
-                  WHERE EMP_NUM = " + tmp + ";"
+        sqlvar = "SELECT CREDENTIALS FROM GroceryApp_EMPLOYEES\
+                  WHERE EMP_NUM = '" + tmp + "';"
 
-        return password == mycursor.execute(sqlvar)
+        mycursor.execute(sqlvar)
+        result = mycursor.fetchall()
+
+        return password == str(result[0][0])
 
     @classmethod
     def Remove(self, mycursor, sku):
+        print("Attempting to remove product...")
         tmp = str(sku)
         sqlvar = "DELETE FROM INVENTORY\
                   WHERE SKU = " + tmp + ";\

@@ -5,9 +5,12 @@ import Queries
 class LoginWindow(Frame):
 
     def __init__(self, connection, master = None):
+        center_x = master.winfo_screenwidth()/2 - 100
+        center_y = master.winfo_screenheight()/2 - 100
+
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("200x200")
+        self.master.geometry("200x200+%d+%d" % (center_x,center_y))
 
         self.connection = connection 
         self.initWindow()
@@ -35,10 +38,17 @@ class LoginWindow(Frame):
         exit()
 
     def login(self, _class):
+
+        # Get credentials from screen
+        user = self.txtUserName.get()
+        password = self.txtPassword.get()
+
+        # Prep error message
         var = StringVar()
         var.set("")
-        if Queries.DbQueries.CheckCredentials():
-        #if True:
+
+        if Queries.DbQueries.CheckCredentials(self.connection.cursor, user, password):
+            print("validation successful. Switching to Inventory Window...")
             self.txtPassword.delete("0", "end")
             root = Tk()
             app = interface.Window(self.connection, root, _class)
@@ -46,6 +56,7 @@ class LoginWindow(Frame):
 
         else:
             # Display message to user
+            print("Validation failed")
             self.label = Label(self, textvariable=var)
             var.set("Username or Password is invalid")
             self.label.place(x=15, y=50)
