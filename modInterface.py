@@ -15,7 +15,7 @@ class Window(Frame):
     def initWindow(self):
         self.master.title("Inventory Management")
         self.pack(fill=BOTH, expand=1)
-        self.connection.Connect()
+        #self.connection.Connect()
         
         self.btnQuit = Button(self, text="Logout", command=self.logout)
         self.btnQuit.place(x=5, y=5)

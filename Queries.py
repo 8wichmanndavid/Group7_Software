@@ -57,3 +57,21 @@ class DbQueries:
         result = mycursor.fetchall()
         
         return result
+
+    @classmethod
+    def CheckCredentials(self, mycursor, empNum, password):
+        tmp = str(empNum)
+        sqlvar = "SELECT CREDENTIALS FROM EMPLOYEES\
+                  WHERE EMP_NUM = " + tmp + ";"
+
+        return password == mycursor.execute(sqlvar)
+
+    @classmethod
+    def Remove(self, mycursor, sku):
+        tmp = str(sku)
+        sqlvar = "DELETE FROM INVENTORY\
+                  WHERE SKU = " + tmp + ";\
+                  DELETE FROM PRODUCTS\
+                  WHERE SKU = " + tmp + ";"
+
+        mycursor.execute(sqlvar)

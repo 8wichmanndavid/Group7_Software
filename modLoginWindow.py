@@ -37,8 +37,8 @@ class LoginWindow(Frame):
     def login(self, _class):
         var = StringVar()
         var.set("")
-        #if self.validateUser():
-        if False:
+        if Queries.DbQueries.CheckCredentials():
+        #if True:
             self.txtPassword.delete("0", "end")
             root = Tk()
             app = interface.Window(self.connection, root, _class)
