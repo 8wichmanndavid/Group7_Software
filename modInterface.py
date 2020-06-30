@@ -3,7 +3,7 @@ from modConnection import *
 import Queries
 from modAddProduct import *
 from modAddCred import *
-from modUpdateProd import *
+
 
 class Window(Frame):
     
@@ -42,9 +42,7 @@ class Window(Frame):
         self.btnAddProduct["width"] = "10"
         self.btnAddProduct.place(x = 457, y = 50)
 
-        self.btnAddEmp = Button(self, text = "Update Product", command=self.updateProduct)
-        self.btnAddEmp["width"] = "12"
-        self.btnAddEmp.place(x = 539, y = 50)
+        
 
         self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
         self.btnExpiration["width"] = "16"
@@ -63,9 +61,7 @@ class Window(Frame):
     def addCredential(self):
         AddEmployee(self.connection)
 
-    def updateProduct(self):
-        updateProd(self.connection)
-
+    
     def client_exit(self):
         self.connection.Disconnect()
         exit()
