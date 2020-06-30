@@ -29,3 +29,6 @@ class Connection:
         self.cursor.close()
         self.connection.close()
         print("Connection terminated")
+
+    def saveData(self):
+        self.connection.commit()
