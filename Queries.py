@@ -74,15 +74,17 @@ class DbQueries:
         return password == str(result[0][0])
 
     @classmethod
-    def Remove(self, mycursor, sku):
+    def Remove(self, mycursor, sku, connection):
         print("Attempting to remove product...")
         tmp = str(sku)
         sqlvar = "DELETE FROM INVENTORY\
-                  WHERE SKU = " + tmp + ";\
-                  DELETE FROM PRODUCTS\
                   WHERE SKU = " + tmp + ";"
 
         mycursor.execute(sqlvar)
+        sqlvar = "DELETE FROM PRODUCTS\
+                  WHERE SKU = " + tmp + ";"
+        mycursor.execute(sqlvar)
+        connection.saveData()
 
     @classmethod
     def addProductQuery(self, mycursor, productList, connection):

@@ -2,6 +2,7 @@ from tkinter import *
 from modConnection import *
 import Queries
 from modAddProduct import *
+from modRemoveProduct import *
 
 class Window(Frame):
     
@@ -47,11 +48,18 @@ class Window(Frame):
         self.btnAddProduct["width"] = "16"
         self.btnAddProduct.place(x = 615, y = 50)
 
+        self.btnAddProduct = Button(self, text = "Remove Product", command=self.openRemoveProductWindow)
+        self.btnAddProduct["width"] = "16"
+        self.btnAddProduct.place(x = 755, y = 50)
+
         # Initialize display with all products
         self.reset()
 
     def openAddProductWindow(self):
         self.master = Add_Product(self.connection)
+
+    def openRemoveProductWindow(self):
+        Remove_Product(self.connection)
 
     def display(self, textOutput):
 
