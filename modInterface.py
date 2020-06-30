@@ -2,6 +2,8 @@ from tkinter import *
 from modConnection import *
 import Queries
 from modAddProduct import *
+from modAddCred import *
+from modUpdateProd import *
 
 class Window(Frame):
     
@@ -30,25 +32,39 @@ class Window(Frame):
 
         self.btnReset = Button(self, text="Reset", command=self.reset)
         self.btnReset["width"] = 7
-        self.btnReset.place(x=400, y=50)
+        self.btnReset.place(x=385, y=50)
 
         self.txtDisplay = Text(self, height=35, width=118)
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
+   
+        self.btnAddProduct = Button(self, text = "Add Product", command=self.openAddProductWindow)
+        self.btnAddProduct["width"] = "10"
+        self.btnAddProduct.place(x = 457, y = 50)
+
+        self.btnAddEmp = Button(self, text = "Update Product", command=self.updateProduct)
+        self.btnAddEmp["width"] = "12"
+        self.btnAddEmp.place(x = 539, y = 50)
 
         self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
         self.btnExpiration["width"] = "16"
-        self.btnExpiration.place(x = 475, y = 50)
+        self.btnExpiration.place(x = 635, y = 50)
 
-        self.btnAddProduct = Button(self, text = "Add Product", command=self.openAddProductWindow)
-        self.btnAddProduct["width"] = "16"
-        self.btnAddProduct.place(x = 615, y = 50)
+        self.btnAddEmp = Button(self, text = "Add Employee", command=self.addCredential)
+        self.btnAddEmp["width"] = "11"
+        self.btnAddEmp.place(x = 885, y = 50)
 
         # Initialize display with all products
         self.reset()
 
     def openAddProductWindow(self):
-        self.master = Add_Product(self.connection)
+        Add_Product(self.connection)
+
+    def addCredential(self):
+        AddEmployee(self.connection)
+
+    def updateProduct(self):
+        updateProd(self.connection)
 
     def client_exit(self):
         self.connection.Disconnect()

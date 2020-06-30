@@ -80,3 +80,22 @@ class DbQueries:
         mycursor.execute(sql_inventory_insert, sql_inventory_val)
 
         connection.saveData()
+
+
+    @classmethod
+    def addCred(self, mycursor, empInfo, connection):
+        sqlvar1 = "insert into employees \
+                  (employees.emp_num, employees.f_name, employees.m_init, employees.l_name, employees.dept_num, employees.cridencials)\
+                  values(%s, %s, %s, %s, %s, %s)"
+        sqlvar2 = (empInfo[0],empInfo[1],empInfo[2],empInfo[3],empInfo[4],empInfo[5])
+
+        mycursor.execute(sqlvar1,sqlvar2)
+        connection.saveData()
+                               
+                              
+    
+
+
+    
+
+    
