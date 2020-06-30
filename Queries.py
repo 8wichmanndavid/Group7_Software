@@ -84,6 +84,7 @@ class DbQueries:
 
         mycursor.execute(sqlvar)
 
+    @classmethod
     def addProductQuery(self, mycursor, productList, connection):
         sql_department_insert = "INSERT IGNORE INTO DEPARTMENT(DEPARTMENT.DEPT_NUM, DEPARTMENT.DEPT_NAME)VALUES(%s, %s)"
         sql_department_val = (productList[0], productList[1])
