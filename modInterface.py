@@ -5,10 +5,13 @@ from modAddProduct import *
 
 class Window(Frame):
     
-    def __init__(self, connection, master = None):
+    def __init__(self, connection, master, loginWindow):
+        center_x = master.winfo_screenwidth()/2 - 500
+        center_y = master.winfo_screenheight()/2 - 350
+
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("1000x700")
+        self.master.geometry("1000x700+%d+%d" % (center_x, center_y))
 
         self.connection = connection
         self.initWindow()
@@ -16,9 +19,9 @@ class Window(Frame):
     def initWindow(self):
         self.master.title("Inventory Management")
         self.pack(fill=BOTH, expand=1)
-        self.connection.Connect()
+        #self.connection.Connect()
         
-        self.btnQuit = Button(self, text="Exit", command=self.client_exit)
+        self.btnQuit = Button(self, text="Logout", command=self.logout)
         self.btnQuit.place(x=5, y=5)
 
         self.txtSearch = Text(self, height=1, width=30)
@@ -50,10 +53,6 @@ class Window(Frame):
     def openAddProductWindow(self):
         self.master = Add_Product(self.connection)
 
-    def client_exit(self):
-        self.connection.Disconnect()
-        exit()
-
     def display(self, textOutput):
 
         # Initialize display box for editing
@@ -82,14 +81,14 @@ class Window(Frame):
 
         # Determine table column to search by
         if searchBy.isnumeric():
-            filterBy = "prod.SKU = " + searchBy
+            filterBy = "prod.SKU LIKE '%" + searchBy + "%'"
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         elif searchBy == "":
             data = Queries.DbQueries.ShowAll_Inventory(self.connection.cursor)
 
         else:
-            filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'"
+            filterBy = "prod.PROD_NAME LIKE '%" + searchBy.lower() + "%'"
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         output = self.formatResult(data)
@@ -126,3 +125,6 @@ class Window(Frame):
             )
 
         return output
+
+    def logout(self):
+        self.master.destroy()
