@@ -104,3 +104,67 @@ class DbQueries:
         mycursor.execute(sql_inventory_insert, sql_inventory_val)
 
         connection.saveData()
+
+    @classmethod
+    def addCred(self, mycursor, empInfo, connection):
+        sqlvar1 = "insert into employees \
+                  (employees.emp_num, employees.f_name, employees.m_init, employees.l_name, employees.dept_num, employees.credentials)\
+                  values(%s, %s, %s, %s, %s, %s)"
+        sqlvar2 = (empInfo[0],empInfo[1],empInfo[2],empInfo[3],empInfo[4],empInfo[5])
+
+        mycursor.execute(sqlvar1,sqlvar2)
+        connection.saveData()
+                               
+                              
+    @classmethod
+    def Remove(self, mycursor, sku, connection):
+        print("Attempting to remove product...")
+        tmp = str(sku)
+        sqlvar = "DELETE FROM INVENTORY\
+                  WHERE SKU = " + tmp + ";"
+
+        mycursor.execute(sqlvar)
+        sqlvar = "DELETE FROM PRODUCTS\
+                  WHERE SKU = " + tmp + ";"
+        mycursor.execute(sqlvar)
+        connection.saveData()
+
+    @classmethod
+    def updateProductQuery(self, mycursor, productList, connection):
+        sql_products_insert = "UPDATE PRODUCTS SET PRODUCTS.PROD_NAME = %s, PRODUCTS.BRAND= %s,PRODUCTS.DEPT_NUM= %s, PRODUCTS.UNIT_PRC= %s WHERE PRODUCTS.SKU =%s"
+        sql_products_val = (productList[1], productList[2], productList[3], productList[4], productList[0])
+
+ 
+        mycursor.execute(sql_products_insert, sql_products_val)
+        connection.saveData()
+                              
+        
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        

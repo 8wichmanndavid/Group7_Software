@@ -2,6 +2,10 @@ from tkinter import *
 from modConnection import *
 import Queries
 from modAddProduct import *
+from modAddCred import *
+from modUpdateProd import *
+from modRemoveProduct import *
+
 
 class Window(Frame):
     
@@ -11,7 +15,7 @@ class Window(Frame):
 
         Frame.__init__(self, master)
         self.master = master
-        self.master.geometry("1000x700+%d+%d" % (center_x, center_y))
+        self.master.geometry("1000x700")
 
         self.connection = connection
         self.initWindow()
@@ -19,7 +23,7 @@ class Window(Frame):
     def initWindow(self):
         self.master.title("Inventory Management")
         self.pack(fill=BOTH, expand=1)
-        #self.connection.Connect()
+        self.connection.Connect()
         
         self.btnQuit = Button(self, text="Logout", command=self.logout)
         self.btnQuit.place(x=5, y=5)
@@ -33,25 +37,50 @@ class Window(Frame):
 
         self.btnReset = Button(self, text="Reset", command=self.reset)
         self.btnReset["width"] = 7
-        self.btnReset.place(x=400, y=50)
+        self.btnReset.place(x=385, y=50)
 
         self.txtDisplay = Text(self, height=35, width=118)
         self.txtDisplay["state"] = "disabled"
         self.txtDisplay.place(x=25, y=90)
+   
+        self.btnAddProduct = Button(self, text = "Add Product", command=self.openAddProductWindow)
+        self.btnAddProduct["width"] = "10"
+        self.btnAddProduct.place(x = 457, y = 50)
+
+        self.btnUpdateProduct = Button(self, text = "Update Product", command=self.updateProduct)
+        self.btnUpdateProduct["width"] = "12"
+        self.btnUpdateProduct.place(x = 539, y = 50)
 
         self.btnExpiration = Button(self, text = "Show Expiration Date", command=self.showExpiration)
         self.btnExpiration["width"] = "16"
-        self.btnExpiration.place(x = 475, y = 50)
+        self.btnExpiration.place(x=750, y = 50)
 
-        self.btnAddProduct = Button(self, text = "Add Product", command=self.openAddProductWindow)
-        self.btnAddProduct["width"] = "16"
-        self.btnAddProduct.place(x = 615, y = 50)
+        self.btnAddEmp = Button(self, text = "Add Employee", command=self.addCredential)
+        self.btnAddEmp["width"] = "11"
+        self.btnAddEmp.place(x = 885, y = 50)
+
+        self.btnRemoveProduct = Button(self, text = "Remove Product", command=self.openRemoveProductWindow)
+        self.btnRemoveProduct["width"] = "13"
+        self.btnRemoveProduct.place(x = 635, y = 50)
 
         # Initialize display with all products
         self.reset()
 
     def openAddProductWindow(self):
-        self.master = Add_Product(self.connection)
+        Add_Product(self.connection)
+
+    def addCredential(self):
+        AddEmployee(self.connection)
+
+    def updateProduct(self):
+        updateProd(self.connection)
+
+    def openRemoveProductWindow(self):
+        Remove_Product(self.connection)
+        
+    def client_exit(self):
+        self.connection.Disconnect()
+        exit()
 
     def display(self, textOutput):
 
@@ -81,14 +110,14 @@ class Window(Frame):
 
         # Determine table column to search by
         if searchBy.isnumeric():
-            filterBy = "prod.SKU LIKE '%" + searchBy + "%'"
+            filterBy = "prod.SKU = " + searchBy
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         elif searchBy == "":
             data = Queries.DbQueries.ShowAll_Inventory(self.connection.cursor)
 
         else:
-            filterBy = "prod.PROD_NAME LIKE '%" + searchBy.lower() + "%'"
+            filterBy = "prod.PROD_NAME = '" + searchBy.lower() + "'"
             data = Queries.DbQueries.SearchQuery(self.connection.cursor, filterBy)
 
         output = self.formatResult(data)
